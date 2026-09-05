@@ -1,0 +1,37 @@
+name: Curve-fit platform tests
+on:
+  push:
+    branches: [test-curve-fit-platforms]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile OSP and regression tests
+        run: python test/ci/platform_tests.py build
+      - name: Run tests on Linux display
+        if: runner.os == 'Linux'
+        run: xvfb-run -a python test/ci/platform_tests.py test
+      - name: Run tests on desktop display
+        if: runner.os != 'Linux'
+        run: python test/ci/platform_tests.py test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: curve-fit-${{ runner.os }}
+          path: platform-results/
