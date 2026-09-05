@@ -4,6 +4,8 @@ import shutil
 import subprocess
 import sys
 
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 classes = Path('platform-results/classes')
 classes.mkdir(parents=True, exist_ok=True)
 if sys.argv[1] == 'build':
