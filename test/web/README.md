@@ -14,7 +14,7 @@ mvn -f test/web/pom.xml dependency:copy-dependencies -DoutputDirectory=deps
 python test/web/prepare_site.py
 javac -cp 'test/web/deps/*:swingjs/j2s.core.jar' test/web/Transpile.java
 java -Xmx2g -cp 'test/web:test/web/deps/*:swingjs/j2s.core.jar' Transpile src test/web/site/swingjs/j2s ALL
-java -cp 'test/web:test/web/deps/*:swingjs/j2s.core.jar' Transpile src test/web/site/swingjs/j2s test/org/opensourcephysics/tools/CurveFitPrecisionTest.java test/org/opensourcephysics/tools/CurveFitReportTest.java test/web/BrowserFitTest.java
+java -cp 'test/web:test/web/deps/*:swingjs/j2s.core.jar' Transpile src test/web/site/swingjs/j2s test/org/opensourcephysics/tools/CurveFitPrecisionTest.java test/org/opensourcephysics/tools/CurveFitReportTest.java test/web/BrowserFitTest.java test/org/opensourcephysics/tools/CurveFitConstraintTest.java
 python -m playwright install chromium firefox webkit
 python -m http.server 8765 --bind 127.0.0.1 --directory test/web/site
 ```
@@ -26,7 +26,7 @@ python test/web/browser_tests.py
 python test/web/browser_fit.py
 ```
 
-The first script expects 19 precision and 62 report assertions per engine. The
+The first script expects 19 precision, 62 report, and 40 constraint assertions per engine. The
 second exercises the Data Tool at 950x700, 1600x1000, and 950x700 again, selecting
 16, 1, 2, 3, 8, 15, and 16 points at each size. It checks stable plot allocation,
 parameter orientation and count, report column structure, and a real copy-button

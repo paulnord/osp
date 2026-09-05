@@ -19,7 +19,7 @@ public class Transpile {
    ASTParser parser=ASTParser.newParser(AST.JLS11);
    Map<String,String> options=JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_11,options);parser.setCompilerOptions(options);
-   parser.setEnvironment(new String[]{Path.of(System.getProperty("test.classpath", "platform-results/classes")).toAbsolutePath().toString()},new String[]{root},new String[]{"UTF-8"},true);
+   parser.setEnvironment(new String[]{Path.of(System.getProperty("test.classpath", "platform-results/classes")).toAbsolutePath().toString()},new String[]{root,Path.of(root).getParent().resolve("test").toString()},new String[]{"UTF-8","UTF-8"},true);
    parser.setUnitName(file.getFileName().toString());parser.setSource(Files.readString(file).toCharArray());parser.setResolveBindings(true);
    CompilationUnit unit=(CompilationUnit)parser.createAST(null);
    for(var problem:unit.getProblems())if(problem.isError())throw new RuntimeException(file+": "+problem);

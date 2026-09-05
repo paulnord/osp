@@ -7,7 +7,7 @@ with sync_playwright() as p:
  for engine in (sys.argv[1:] or ['chromium','firefox','webkit']):
   options={'headless':True}
   browser=getattr(p,engine).launch(**options)
-  for test in ['precision','report']:
+  for test in ['precision','report','constraint']:
    page=browser.new_page(viewport={'width':1200,'height':900});errors=[];logs=[]
    page.on('pageerror',lambda err:(errors.append(str(err)),print('ERROR: '+str(err),flush=True)))
    page.on('console',lambda msg:(logs.append(msg.type+': '+msg.text),print(msg.type+': '+msg.text,flush=True)))

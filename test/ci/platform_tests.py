@@ -23,7 +23,7 @@ if sys.argv[1] == 'build':
                 shutil.copyfile(p, dest)
 else:
     failed = []
-    for name in ['Precision', 'Report', 'Popup', 'DataToolLayout']:
+    for name in ['Precision', 'Report', 'Popup', 'DataToolLayout', 'Constraint']:
         cls = 'CurveFit' + name + 'Test'
         command = ['java', '-Duser.language=en', '-Duser.country=US', '-cp', str(classes), 'org.opensourcephysics.tools.' + cls]
         try:
