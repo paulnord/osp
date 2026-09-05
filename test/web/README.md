@@ -34,3 +34,7 @@ click. Chromium also compares the clipboard contents to the generated report.
 JSON logs and screenshots are written beside these scripts. Firefox and WebKit
 clipboard contents are not read back. WebKit automation is not a Safari or iOS
 device test. No mobile touch behavior or video decoding is covered.
+
+The numerical constraint fixture uses model updates in SwingJS because its tables
+are not attached to a DOM. The separate browser UI test edits the actual checkbox
+in the visible Data Tool and checks the updated free-parameter count and report.

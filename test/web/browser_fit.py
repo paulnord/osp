@@ -30,6 +30,13 @@ with sync_playwright() as p:
      if baseline is None:baseline=layout
      assert layout==baseline,('layout moved',baseline,layout)
     page.screenshot(path=str(out/(engine+'-fit-'+str(w)+'.png')))
+   page.evaluate('org.opensourcephysics.tools.BrowserFitTest.setFixed$I$Z(0,true)');page.wait_for_timeout(200)
+   constrained=page.evaluate('org.opensourcephysics.tools.BrowserFitTest.report$()')
+   assert 'Free parameters: 2' in page.locator('body').inner_text().replace('\u00a0',' ')
+   coefficient=next(row for row in constrained.splitlines() if row.startswith('A\t')).split('\t')
+   assert coefficient[2:4]==['N/A','Yes'],coefficient
+   page.evaluate('org.opensourcephysics.tools.BrowserFitTest.setFixed$I$Z(0,false)');page.wait_for_timeout(200)
+   assert 'Free parameters: 3' in page.locator('body').inner_text().replace('\u00a0',' ')
    report=page.evaluate('org.opensourcephysics.tools.BrowserFitTest.report$()')
    assert report.startswith('SUMMARY OUTPUT\t'),report
    assert all(len(row.split('\t'))==5 for row in report.splitlines()),report

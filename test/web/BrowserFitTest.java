@@ -16,11 +16,15 @@ public class BrowserFitTest {
  public static Dataset data(int n){Dataset d=new Dataset();d.setXYColumnNames("t","y");for(int i=0;i<n;i++){double t=i/30.0;d.append(t,-1980*t*t+1067*t-3.9+0.4*Math.sin(i));}return d;}
  public static void select(int n){tab.setSelectedData(data(n),true);}
  public static void resize(int width,int height){tool.setSize(width,height);tab.splitPanes[0].setDividerLocation(0.7);tool.validate();}
+ public static void setFixed(int row, boolean fixed){
+  JTable table=(JTable)((JScrollPane)fitter.splitPane.getRightComponent()).getViewport().getView();
+  if(((Boolean)table.getValueAt(row,1)).booleanValue()!=fixed){table.editCellAt(row,1);((JCheckBox)table.getEditorComponent()).doClick();}
+ }
  public static String snapshot(){
   JScrollPane scroll=(JScrollPane)fitter.splitPane.getRightComponent();JTable table=(JTable)scroll.getViewport().getView();
   String s=tab.splitPanes[1].getDividerLocation()+"|"+fitter.splitPane.getOrientation()+"|"+table.getRowCount();
   for(int row=0;row<table.getRowCount();row++)s+="|"+table.getValueAt(row,2);
   return s;
  }
- public static String report(){double[] sigma=new double[fitter.fit.getParameterCount()];for(int i=0;i<sigma.length;i++)sigma[i]=fitter.getUncertainty(i);return CurveFitReport.create(fitter.fit,data(16),null,sigma,true,true);}
+ public static String report(){double[] sigma=new double[fitter.fit.getParameterCount()];for(int i=0;i<sigma.length;i++)sigma[i]=fitter.getUncertainty(i);JTable table=(JTable)((JScrollPane)fitter.splitPane.getRightComponent()).getViewport().getView();boolean[] fixed=new boolean[sigma.length];for(int i=0;i<fixed.length;i++)fixed[i]=(Boolean)table.getValueAt(i,1);return CurveFitReport.create(fitter.fit,fitter.getData(),fixed,sigma,fitter.isAutoFit(),true);}
 }
